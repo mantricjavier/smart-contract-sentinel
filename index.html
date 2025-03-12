@@ -181,7 +181,8 @@
         const config = {
             stripeCheckoutUrl: '{{STRIPE_CHECKOUT_URL}}',
             mailerLiteFormId: '{{MAILERLITE_FORM_ID}}',
-            mailerLiteAccountId: '{{MAILERLITE_ACCOUNT_ID}}'
+            mailerLiteAccountId: '{{MAILERLITE_ACCOUNT_ID}}',
+            analytics: '{{ANALYTICS}}'
         };
     </script>
     
@@ -194,6 +195,16 @@
         ml('account', config.mailerLiteAccountId);
     </script>
     <!-- End MailerLite Universal -->
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-522EZM8G8W"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', config.analytics);
+    </script>
 
 </head>
 <body>
