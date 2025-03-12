@@ -175,6 +175,26 @@
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
+
+
+    <script id="config-script">
+        const config = {
+            stripeCheckoutUrl: 'https://buy.stripe.com/8wM8zg55K1oZfgQ4gh',
+            mailerLiteFormId: 'Vw2wfR',
+            mailerLiteAccountId: '1380536'
+        };
+    </script>
+    
+    <!-- MailerLite Universal -->
+    <script>
+        (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+        .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+        n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+        (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+        ml('account', config.mailerLiteAccountId);
+    </script>
+    <!-- End MailerLite Universal -->
+
 </head>
 <body>
     <canvas id="particles"></canvas>
@@ -208,15 +228,9 @@
         <br>
         <a href="#" class="preorder" id="preorder-link">Pre-Order: $100 – Refundable</a>
         <footer>Engineered by <a href="https://x.com/jvr0x" target="_blank" style="color: #00D1FF; text-decoration: none; transition: color 0.3s ease;">@jvr0x</a> – Securing the Smart Contract Grid</footer>
+    
+        <div class="ml-embedded" data-form="S3P2NJ"></div>
     </div>
-
-    <script id="config-script">
-        const config = {
-            stripeCheckoutUrl: 'https://buy.stripe.com/8wM8zg55K1oZfgQ4gh',
-            mailerLiteFormId: 'Vw2wfR',
-            mailerLiteAccountId: '1380536'
-        };
-    </script>
 
     <script>
         // Particle Background Effect
@@ -285,7 +299,7 @@
         document.getElementById('waitlist-link').addEventListener('click', function(e) {
             e.preventDefault();
             if (typeof ml === 'function' && ml && config.mailerLiteFormId) {
-                ml('show', config.mailerLiteFormId, true);
+                ml('show', config.mailerLiteFormId, true); // Use config for form ID
             } else {
                 console.log('MailerLite script not loaded or ml function unavailable. Check internet connection or account approval.');
                 alert('Oops! The waitlist form failed to load. Please try again or contact support.');
@@ -300,13 +314,6 @@
                 alert('Pre-order link is not available. Contact support for assistance.');
             }
         });
-
-        // MailerLite Script with placeholder for account ID
-        (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
-        .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
-        n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
-        (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
-        ml('account', config.mailerLiteAccountId);
     </script>
 </body>
 </html>
