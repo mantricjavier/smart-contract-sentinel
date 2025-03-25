@@ -1,418 +1,579 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smart Contract Sentinel</title>
     <style>
-        body {
-            background: radial-gradient(circle at center, #1C2526 0%, #0A0F12 100%);
-            color: #E0E0E0;
-            font-family: 'Exo 2', sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            position: relative;
+      body {
+        background: radial-gradient(circle at center, #1c2526 0%, #0a0f12 100%);
+        color: #e0e0e0;
+        font-family: "Exo 2", sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        position: relative;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 50px auto;
+        padding: 40px;
+        border: 2px solid #9945ff;
+        background: rgba(10, 15, 18, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 0 30px rgba(153, 69, 255, 0.3),
+          0 0 80px 40px rgba(10, 15, 18, 0.2);
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        text-align: center;
+      }
+      .container::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        border: 2px solid transparent;
+        border-radius: 20px;
+        box-shadow: 0 0 20px #14f195;
+        animation: orbitGlow 5s linear infinite;
+        z-index: -1;
+      }
+      @keyframes orbitGlow {
+        0% {
+          box-shadow: 0 0 20px #14f195;
+        }
+        50% {
+          box-shadow: 0 0 30px #00d1ff;
+        }
+        100% {
+          box-shadow: 0 0 20px #14f195;
+        }
+      }
+      h1 {
+        font-size: 54px;
+        color: #14f195;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        text-shadow: 0 0 15px rgba(20, 241, 149, 0.8);
+        margin-bottom: 10px;
+        animation: textPulse 3s infinite;
+      }
+      @keyframes textPulse {
+        0% {
+          text-shadow: 0 0 10px rgba(20, 241, 149, 0.8);
+        }
+        50% {
+          text-shadow: 0 0 20px rgba(0, 209, 255, 0.8);
+        }
+        100% {
+          text-shadow: 0 0 10px rgba(20, 241, 149, 0.8);
+        }
+      }
+      p.subtitle {
+        font-size: 22px;
+        color: #e0e0e0;
+        letter-spacing: 1px;
+        margin-bottom: 30px;
+      }
+      .github-banner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(10, 15, 18, 0.8);
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        font-size: 16px;
+        color: #14f195;
+        text-shadow: 0 0 5px rgba(20, 241, 149, 0.5);
+      }
+      .github-banner svg {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+        fill: #00d1ff;
+        filter: drop-shadow(0 0 5px rgba(0, 209, 255, 0.5));
+      }
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+      .feature-card {
+        background: rgba(10, 15, 18, 0.9);
+        border: 1px solid transparent;
+        border-radius: 10px;
+        padding: 20px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+        animation: cardGlow 4s infinite;
+      }
+      @keyframes cardGlow {
+        0% {
+          border-color: #14f195;
+          box-shadow: 0 4px 10px rgba(20, 241, 149, 0.3);
+        }
+        50% {
+          border-color: #00d1ff;
+          box-shadow: 0 4px 10px rgba(0, 209, 255, 0.3);
+        }
+        100% {
+          border-color: #14f195;
+          box-shadow: 0 4px 10px rgba(20, 241, 149, 0.3);
+        }
+      }
+      .feature-card:hover {
+        transform: translateY(-5px);
+      }
+      .feature-card span {
+        color: #14f195;
+        font-size: 20px;
+        font-weight: bold;
+        text-shadow: 0 0 5px rgba(20, 241, 149, 0.5);
+      }
+      .feature-card p {
+        color: #e0e0e0;
+        font-size: 14px;
+        margin: 10px 0 0;
+      }
+      .cta-button {
+        background: linear-gradient(90deg, #9945ff, #14f195);
+        color: #0a0f12;
+        padding: 15px 40px;
+        font-size: 20px;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-decoration: none;
+        border-radius: 30px;
+        display: block;
+        width: fit-content;
+        margin: 0 auto 10px;
+        box-shadow: 0 0 15px rgba(153, 69, 255, 0.6);
+        transition: all 0.3s ease;
+      }
+      .cta-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 25px rgba(20, 241, 149, 0.8);
+      }
+      .preorder {
+        color: #00d1ff;
+        font-size: 16px;
+        text-decoration: none;
+        border-bottom: 1px dotted #00d1ff;
+        transition: all 0.3s ease;
+        display: block;
+        width: fit-content;
+        margin: 0 auto;
+      }
+      .preorder:hover {
+        color: #14f195;
+        border-bottom: 1px solid #14f195;
+      }
+      footer {
+        font-size: 12px;
+        color: #666666;
+        margin-top: 10px;
+        text-align: center;
+        text-shadow: 0 0 5px rgba(153, 69, 255, 0.2);
+      }
+      #particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .about-founder,
+      .testimonials,
+      .comparison {
+        margin: 30px 0;
+        padding: 20px;
+        background: rgba(10, 15, 18, 0.9);
+        border-radius: 10px;
+        border: 1px solid #14f195;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+      }
+      .about-founder h2,
+      .testimonials h2,
+      .comparison h2 {
+        color: #14f195;
+        font-size: 28px;
+        text-shadow: 0 0 5px rgba(20, 241, 149, 0.5);
+        margin-bottom: 15px;
+      }
+      .about-founder p,
+      .testimonials p {
+        font-size: 16px;
+        color: #e0e0e0;
+      }
+      .testimonials p.quote {
+        font-style: italic;
+        color: #00d1ff;
+      }
+      .testimonials p.author {
+        font-size: 14px;
+        color: #e0e0e0;
+        margin-top: 5px;
+      }
+      .comparison table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0 auto;
+      }
+      .comparison th,
+      .comparison td {
+        padding: 10px;
+        border: 1px solid #14f195;
+        text-align: center;
+        font-size: 14px;
+      }
+      .comparison th {
+        background: rgba(20, 241, 149, 0.2);
+        color: #14f195;
+      }
+      .comparison td {
+        color: #e0e0e0;
+      }
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 36px;
         }
         .container {
-            max-width: 1000px;
-            margin: 50px auto;
-            padding: 40px;
-            border: 2px solid #9945FF;
-            background: rgba(10, 15, 18, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(153, 69, 255, 0.3), 0 0 80px 40px rgba(10, 15, 18, 0.2);
-            position: relative;
-            z-index: 1;
-            overflow: hidden;
-            text-align: center;
-        }
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            border: 2px solid transparent;
-            border-radius: 20px;
-            box-shadow: 0 0 20px #14F195;
-            animation: orbitGlow 5s linear infinite;
-            z-index: -1;
-        }
-        @keyframes orbitGlow {
-            0% { box-shadow: 0 0 20px #14F195; }
-            50% { box-shadow: 0 0 30px #00D1FF; }
-            100% { box-shadow: 0 0 20px #14F195; }
-        }
-        h1 {
-            font-size: 54px;
-            color: #14F195;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            text-shadow: 0 0 15px rgba(20, 241, 149, 0.8);
-            margin-bottom: 10px;
-            animation: textPulse 3s infinite;
-        }
-        @keyframes textPulse {
-            0% { text-shadow: 0 0 10px rgba(20, 241, 149, 0.8); }
-            50% { text-shadow: 0 0 20px rgba(0, 209, 255, 0.8); }
-            100% { text-shadow: 0 0 10px rgba(20, 241, 149, 0.8); }
-        }
-        p.subtitle {
-            font-size: 22px;
-            color: #e0e0e0;
-            letter-spacing: 1px;
-            margin-bottom: 30px;
-        }
-        .github-banner {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(10, 15, 18, 0.8);
-            padding: 10px 20px;
-            margin-bottom: 20px;
-            font-size: 16px;
-            color: #14F195;
-            text-shadow: 0 0 5px rgba(20, 241, 149, 0.5);
-        }
-        .github-banner svg {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
-            fill: #00D1FF;
-            filter: drop-shadow(0 0 5px rgba(0, 209, 255, 0.5));
+          margin: 20px;
+          padding: 20px;
         }
         .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+          grid-template-columns: 1fr;
         }
-        .feature-card {
-            background: rgba(10, 15, 18, 0.9);
-            border: 1px solid transparent;
-            border-radius: 10px;
-            padding: 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-            animation: cardGlow 4s infinite;
+        .github-banner {
+          font-size: 14px;
         }
-        @keyframes cardGlow {
-            0% { border-color: #14F195; box-shadow: 0 4px 10px rgba(20, 241, 149, 0.3); }
-            50% { border-color: #00D1FF; box-shadow: 0 4px 10px rgba(0, 209, 255, 0.3); }
-            100% { border-color: #14F195; box-shadow: 0 4px 10px rgba(20, 241, 149, 0.3); }
+        .github-banner svg {
+          width: 20px;
+          height: 20px;
         }
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-        .feature-card span {
-            color: #14F195;
-            font-size: 20px;
-            font-weight: bold;
-            text-shadow: 0 0 5px rgba(20, 241, 149, 0.5);
-        }
-        .feature-card p {
-            color: #E0E0E0;
-            font-size: 14px;
-            margin: 10px 0 0;
-        }
-        .cta-button {
-            background: linear-gradient(90deg, #9945FF, #14F195);
-            color: #0A0F12;
-            padding: 15px 40px;
-            font-size: 20px;
-            font-weight: bold;
-            text-transform: uppercase;
-            text-decoration: none;
-            border-radius: 30px;
-            display: block;
-            width: fit-content;
-            margin: 0 auto 10px;
-            box-shadow: 0 0 15px rgba(153, 69, 255, 0.6);
-            transition: all 0.3s ease;
-        }
-        .cta-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px rgba(20, 241, 149, 0.8);
-        }
-        .preorder {
-            color: #00D1FF;
-            font-size: 16px;
-            text-decoration: none;
-            border-bottom: 1px dotted #00D1FF;
-            transition: all 0.3s ease;
-            display: block;
-            width: fit-content;
-            margin: 0 auto;
-        }
-        .preorder:hover {
-            color: #14F195;
-            border-bottom: 1px solid #14F195;
-        }
-        footer {
-            font-size: 12px;
-            color: #666666;
-            margin-top: 10px;
-            text-align: center;
-            text-shadow: 0 0 5px rgba(153, 69, 255, 0.2);
-        }
-        #particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .about-founder, .testimonials, .comparison {
-            margin: 30px 0;
-            padding: 20px;
-            background: rgba(10, 15, 18, 0.9);
-            border-radius: 10px;
-            border: 1px solid #14F195;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-        }
-        .about-founder h2, .testimonials h2, .comparison h2 {
-            color: #14F195;
-            font-size: 28px;
-            text-shadow: 0 0 5px rgba(20, 241, 149, 0.5);
-            margin-bottom: 15px;
-        }
-        .about-founder p, .testimonials p {
-            font-size: 16px;
-            color: #E0E0E0;
-        }
-        .testimonials p.quote {
-            font-style: italic;
-            color: #00D1FF;
-        }
-        .testimonials p.author {
-            font-size: 14px;
-            color: #E0E0E0;
-            margin-top: 5px;
-        }
-        .comparison table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0 auto;
-        }
-        .comparison th, .comparison td {
-            padding: 10px;
-            border: 1px solid #14F195;
-            text-align: center;
-            font-size: 14px;
-        }
-        .comparison th {
-            background: rgba(20, 241, 149, 0.2);
-            color: #14F195;
-        }
+        .comparison table,
+        .comparison th,
         .comparison td {
-            color: #E0E0E0;
+          font-size: 12px;
+          padding: 5px;
         }
-        @media (max-width: 600px) {
-            h1 { font-size: 36px; }
-            .container { margin: 20px; padding: 20px; }
-            .features { grid-template-columns: 1fr; }
-            .github-banner { font-size: 14px; }
-            .github-banner svg { width: 20px; height: 20px; }
-            .comparison table, .comparison th, .comparison td {
-                font-size: 12px;
-                padding: 5px;
-            }
-        }
+      }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
 
     <script id="config-script">
-        const config = {
-            stripeCheckoutUrl: '{{STRIPE_CHECKOUT_URL}}',
-            mailerLiteFormId: '{{MAILERLITE_FORM_ID}}',
-            mailerLiteAccountId: '{{MAILERLITE_ACCOUNT_ID}}',
-            analytics: '{{ANALYTICS}}'
-        };
+      const config = {
+        stripeCheckoutUrl: "{{STRIPE_CHECKOUT_URL}}",
+        mailerLiteFormId: "{{MAILERLITE_FORM_ID}}",
+        mailerLiteAccountId: "{{MAILERLITE_ACCOUNT_ID}}",
+        analytics: "{{ANALYTICS}}",
+      };
     </script>
-    
+
     <!-- MailerLite Universal -->
     <script>
-        (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
-        .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
-        n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
-        (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
-        ml('account', config.mailerLiteAccountId);
+      (function (w, d, e, u, f, l, n) {
+        (w[f] =
+          w[f] ||
+          function () {
+            (w[f].q = w[f].q || []).push(arguments);
+          }),
+          (l = d.createElement(e)),
+          (l.async = 1),
+          (l.src = u),
+          (n = d.getElementsByTagName(e)[0]),
+          n.parentNode.insertBefore(l, n);
+      })(
+        window,
+        document,
+        "script",
+        "https://assets.mailerlite.com/js/universal.js",
+        "ml"
+      );
+      ml("account", config.mailerLiteAccountId);
     </script>
     <!-- End MailerLite Universal -->
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-522EZM8G8W"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-522EZM8G8W"
+    ></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-        gtag('config', config.analytics);
+      gtag("config", config.analytics);
     </script>
-</head>
-<body>
+
+    <!-- Twitter conversion tracking base code -->
+    <script>
+      !(function (e, t, n, s, u, a) {
+        e.twq ||
+          ((s = e.twq =
+            function () {
+              s.exe ? s.exe.apply(s, arguments) : s.queue.push(arguments);
+            }),
+          (s.version = "1.1"),
+          (s.queue = []),
+          (u = t.createElement(n)),
+          (u.async = !0),
+          (u.src = "https://static.ads-twitter.com/uwt.js"),
+          (a = t.getElementsByTagName(n)[0]),
+          a.parentNode.insertBefore(u, a));
+      })(window, document, "script");
+      twq("config", "pcj28");
+    </script>
+    <!-- End Twitter conversion tracking base code -->
+  </head>
+  <body>
     <canvas id="particles"></canvas>
     <div class="container">
-        <h1>SMART CONTRACT SENTINEL</h1>
-        <p class="subtitle">Hacks Cost $2.6B in 2024—Continuous Auditing Stops Vulns in PRs for $500/mo</p>
-        <div class="github-banner" style="margin-bottom: 10px;">
-            Works with EVM, Solana, CosmWasm, and Move!
+      <h1>SMART CONTRACT SENTINEL</h1>
+      <p class="subtitle">
+        Hacks Cost $2.6B in 2024—Continuous Auditing Stops Vulns in PRs for
+        $500/mo
+      </p>
+      <div class="github-banner" style="margin-bottom: 10px">
+        Works with EVM, Solana, CosmWasm, and Move!
+      </div>
+      <div class="github-banner">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 16 16"
+          width="24"
+          height="24"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
+          ></path>
+        </svg>
+        Works with GitHub Workflows!
+      </div>
+      <div class="features">
+        <div class="feature-card">
+          <span>PR Intrusion Detection</span>
+          <p>
+            ZKLend got hacked in 2025—70% of exploits come from PRs. Sentinel
+            catches them pre-merge.
+          </p>
         </div>
-        <div class="github-banner">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="24" height="24">
-                <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
-            </svg>
-            Works with GitHub Workflows!
+        <div class="feature-card">
+          <span>Prevent Exploits</span>
+          <p>
+            One-off audits miss new code—Sentinel’s AI secures every commit,
+            protecting your users.
+          </p>
         </div>
-        <div class="features">
-            <div class="feature-card">
-                <span>PR Intrusion Detection</span>
-                <p>ZKLend got hacked in 2025—70% of exploits come from PRs. Sentinel catches them pre-merge.</p>
-            </div>
-            <div class="feature-card">
-                <span>Prevent Exploits</span>
-                <p>One-off audits miss new code—Sentinel’s AI secures every commit, protecting your users.</p>
-            </div>
-            <div class="feature-card">
-                <span>End-to-End Protection</span>
-                <p>At $500/mo, Sentinel is 100x cheaper than $50k-$200k audits, with better coverage.</p>
-            </div>
+        <div class="feature-card">
+          <span>End-to-End Protection</span>
+          <p>
+            At $500/mo, Sentinel is 100x cheaper than $50k-$200k audits, with
+            better coverage.
+          </p>
         </div>
+      </div>
 
-        <!-- About the Founder Section -->
-        <div class="about-founder">
-            <h2>About Me</h2>
-            <p>I’m Javier (@jvr0x), a smart contract engineer passionate about security. I’ve built tools to secure smart contracts for years, and Sentinel is my mission to make continuous auditing affordable for all DeFi projects.</p>
-        </div>
+      <!-- About the Founder Section -->
+      <div class="about-founder">
+        <h2>About Me</h2>
+        <p>
+          I’m Javier (@jvr0x), a smart contract engineer passionate about
+          security. I’ve built tools to secure smart contracts for years, and
+          Sentinel is my mission to make continuous auditing affordable for all
+          DeFi projects.
+        </p>
+      </div>
 
-        <!-- Testimonials Section -->
-        <div class="testimonials">
-            <h2>What Developers Are Saying</h2>
-            <p class="quote">"Sentinel caught a reentrancy bug pre-merge—saved us from a potential $1M exploit!"</p>
-            <p class="author">— Solana Developer</p>
-        </div>
+      <!-- Testimonials Section -->
+      <div class="testimonials">
+        <h2>What Developers Are Saying</h2>
+        <p class="quote">
+          "Sentinel caught a reentrancy bug pre-merge—saved us from a potential
+          $1M exploit!"
+        </p>
+        <p class="author">— Solana Developer</p>
+      </div>
 
-        <!-- Comparison Table -->
-        <div class="comparison">
-            <h2>One-Off Audits vs. Sentinel</h2>
-            <table>
-                <tr>
-                    <th></th>
-                    <th>One-Off Audit</th>
-                    <th>Smart Contract Sentinel</th>
-                </tr>
-                <tr>
-                    <td>Cost</td>
-                    <td>$50k-$200k per audit</td>
-                    <td>$500/month</td>
-                </tr>
-                <tr>
-                    <td>Coverage</td>
-                    <td>Misses new code, 1x audit</td>
-                    <td>Continuous, every commit</td>
-                </tr>
-                <tr>
-                    <td>Vulnerability Detection</td>
-                    <td>70% of exploits missed in PRs</td>
-                    <td>Catches 70% more vulns pre-merge</td>
-                </tr>
-            </table>
-        </div>
+      <!-- Comparison Table -->
+      <div class="comparison">
+        <h2>One-Off Audits vs. Sentinel</h2>
+        <table>
+          <tr>
+            <th></th>
+            <th>One-Off Audit</th>
+            <th>Smart Contract Sentinel</th>
+          </tr>
+          <tr>
+            <td>Cost</td>
+            <td>$50k-$200k per audit</td>
+            <td>$500/month</td>
+          </tr>
+          <tr>
+            <td>Coverage</td>
+            <td>Misses new code, 1x audit</td>
+            <td>Continuous, every commit</td>
+          </tr>
+          <tr>
+            <td>Vulnerability Detection</td>
+            <td>70% of exploits missed in PRs</td>
+            <td>Catches 70% more vulns pre-merge</td>
+          </tr>
+        </table>
+      </div>
 
-        <a href="#" class="cta-button" id="waitlist-link">Join 50+ DeFi Projects on the Waitlist—Get 20% Off Year 1</a>
-        <br>
-        <a href="#" class="preorder" id="preorder-link">Pre-Order: $100 – Refundable</a>
-        <footer>Built by <a href="https://x.com/jvr0x" target="_blank" style="color: #00D1FF; text-decoration: none; transition: color 0.3s ease;">@jvr0x</a> | Follow <a href="https://x.com/SC_Sentinel" target="_blank" style="color: #00D1FF; text-decoration: none; transition: color 0.3s ease;">@SC_Sentinel</a> for updates – Securing the Smart Contract Grid</footer>
-    
-        <div class="ml-embedded" data-form="S3P2NJ"></div>
+      <a href="#" class="cta-button" id="waitlist-link"
+        >Join 50+ DeFi Projects on the Waitlist—Get 20% Off Year 1</a
+      >
+      <br />
+      <a href="#" class="preorder" id="preorder-link"
+        >Pre-Order: $100 – Refundable</a
+      >
+      <footer>
+        Built by
+        <a
+          href="https://x.com/jvr0x"
+          target="_blank"
+          style="
+            color: #00d1ff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+          "
+          >@jvr0x</a
+        >
+        | Follow
+        <a
+          href="https://x.com/SC_Sentinel"
+          target="_blank"
+          style="
+            color: #00d1ff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+          "
+          >@SC_Sentinel</a
+        >
+        for updates – Securing the Smart Contract Grid
+      </footer>
+
+      <div class="ml-embedded" data-form="S3P2NJ"></div>
     </div>
 
     <script>
-        // Particle Background Effect
-        const canvas = document.getElementById('particles');
-        const ctx = canvas.getContext('2d');
+      // Particle Background Effect
+      const canvas = document.getElementById("particles");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particlesArray = [];
+      const colors = ["#14F195", "#00D1FF", "#9945FF"];
+      const maxParticles = 50;
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.size = Math.random() * 3 + 1;
+          this.speedX = Math.random() * 1 - 0.5;
+          this.speedY = Math.random() * 1 - 0.5;
+          this.color = colors[Math.floor(Math.random() * colors.length)];
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          if (this.size > 0.2) this.size -= 0.03;
+          if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+          if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+        }
+        draw() {
+          ctx.fillStyle = this.color;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      function initParticles() {
+        for (let i = 0; i < maxParticles; i++) {
+          particlesArray.push(new Particle());
+        }
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particlesArray.length; i++) {
+          particlesArray[i].update();
+          particlesArray[i].draw();
+          if (particlesArray[i].size <= 0.2) {
+            particlesArray.splice(i, 1);
+            i--;
+            particlesArray.push(new Particle());
+          }
+        }
+        requestAnimationFrame(animateParticles);
+      }
+
+      initParticles();
+      animateParticles();
+
+      window.addEventListener("resize", () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+      });
 
-        const particlesArray = [];
-        const colors = ['#14F195', '#00D1FF', '#9945FF'];
-        const maxParticles = 50;
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 3 + 1;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * 1 - 0.5;
-                this.color = colors[Math.floor(Math.random() * colors.length)];
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.size > 0.2) this.size -= 0.03;
-                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            for (let i = 0; i < maxParticles; i++) {
-                particlesArray.push(new Particle());
-            }
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-                particlesArray[i].draw();
-                if (particlesArray[i].size <= 0.2) {
-                    particlesArray.splice(i, 1);
-                    i--;
-                    particlesArray.push(new Particle());
-                }
-            }
-            requestAnimationFrame(animateParticles);
-        }
-
-        initParticles();
-        animateParticles();
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+      // Waitlist and Pre-Order Links
+      document
+        .getElementById("waitlist-link")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+          if (typeof ml === "function" && ml && config.mailerLiteFormId) {
+            ml("show", config.mailerLiteFormId, true);
+            // Add a listener for form submission success (MailerLite-specific)
+            // Check MailerLite's documentation for a success callback or webhook
+            // For now, assume a successful submission fires a custom event
+            document.addEventListener(
+              "ml_form_success",
+              function () {
+                twq("track", "Lead"); // Fire lead generation event on signup
+              },
+              { once: true }
+            );
+          } else {
+            console.log(
+              "MailerLite script not loaded or ml function unavailable. Check internet connection or account approval."
+            );
+            alert(
+              "Oops! The waitlist form failed to load. Please try again or contact support."
+            );
+          }
         });
 
-        // Waitlist and Pre-Order Links
-        document.getElementById('waitlist-link').addEventListener('click', function(e) {
-            e.preventDefault();
-            if (typeof ml === 'function' && ml && config.mailerLiteFormId) {
-                ml('show', config.mailerLiteFormId, true); // Use config for form ID
-            } else {
-                console.log('MailerLite script not loaded or ml function unavailable. Check internet connection or account approval.');
-                alert('Our waitlist form is coming soon! In the meantime, join via this Google Form: https://forms.gle/your-google-form-link');
-            }
-        });
-        document.getElementById('preorder-link').addEventListener('click', function(e) {
-            e.preventDefault();
-            if (config.stripeCheckoutUrl) {
-                window.location.href = config.stripeCheckoutUrl;
-            } else {
-                console.log('Stripe Checkout URL not configured.');
-                alert('Pre-order link is not available. Contact support for assistance.');
-            }
+      document
+        .getElementById("preorder-link")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+          if (config.stripeCheckoutUrl) {
+            window.location.href = config.stripeCheckoutUrl;
+          } else {
+            console.log("Stripe Checkout URL not configured.");
+            alert(
+              "Pre-order link is not available. Contact support for assistance."
+            );
+          }
         });
     </script>
-</body>
+  </body>
 </html>
